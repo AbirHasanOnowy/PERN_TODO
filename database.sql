@@ -1,0 +1,6 @@
+CREATE DATABASE IF NOT EXISTS pern_todo;
+
+CREATE TABLE IF NOT EXISTS todo (
+    todo_id SERIAL PRIMARY KEY,
+    description TEXT NOT NULL
+);
