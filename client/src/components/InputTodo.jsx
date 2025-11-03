@@ -3,7 +3,7 @@ import { useState } from "react";
 const InputTodo = () => {
     const [description, setDescription] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e && e.preventDefault();
 
         if (description.trim() === "") {
@@ -12,7 +12,7 @@ const InputTodo = () => {
         }
 
         try {
-            const response = fetch("http://localhost:5000/api/todos", {
+            const response = await fetch("http://localhost:5000/api/todos", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -20,11 +20,17 @@ const InputTodo = () => {
                 body: JSON.stringify({ description }),
             });
 
-            if (response) {
-                alert("Todo Added Successfully");
+            // check response message
+            const res_data = await response.json();
+            console.log("todo insert response:\n", res_data);
+
+            if (response.ok) {
+                // alert("Todo Added Successfully");
                 setDescription("");
+                window.location.reload();
             } else {
                 alert("Failed to add todo");
+                console.error("Why failed to add todo:", res_data);
             }
         } catch (err) {
             console.error(err.message);
