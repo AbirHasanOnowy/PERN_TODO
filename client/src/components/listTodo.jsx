@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import EditTodo from './EditTodo';
 
 const ListTodo = () => {
 
     const [todos, setTodos] = useState([]);
+    const [editingTodo, setEditingTodo] = useState(null);
 
     useEffect(() => {
         const fetchTodos = async () => {
@@ -34,16 +36,20 @@ const ListTodo = () => {
         }
     };
 
-    const handleEdit = (id) => {
-        console.log("Edit todo with id:", id);
-        // Implement edit functionality as needed
+    const handleEdit = (selectedtodo) => {
+        setEditingTodo(selectedtodo);
     };
 
+    const closeModal = () => {
+        setEditingTodo(null);
+    }
+
     return (
-        <div className='mt-5 w-full h-[800px]'>
+        <div className='mt-5 w-full h-[800px] z-0'>
             {/* <h2 className='text-2xl font-semibold text-gray-800 text-center'>Tasks todo by order</h2> */}
             {todos.length === 0 && <p className='text-center mt-10 text-gray-600'>No todos available. Please add some tasks.</p>}
             {todos.length > 0 && <>
+                {editingTodo && <EditTodo todo={editingTodo} onClose={closeModal} />}
                 <ol>
                     <li>
                         <div className='flex font-bold border-b-2 border-gray-400 pb-2 mb-3'>
@@ -59,12 +65,13 @@ const ListTodo = () => {
                             <div className='flex'>
                                 <span className='mx-10'>{todo.todo_id}</span>
                                 <span className='ml-30 w-80'>{todo.description}</span>
-                                <span className='mx-5'><button className='bg-sky-600 text-white rounded-md px-4 py-2' onClick={() => handleEdit(todo.todo_id)}>Edit</button></span>
+                                <span className='mx-5'><button className='bg-sky-600 text-white rounded-md px-4 py-2' onClick={() => handleEdit(todo)}>Edit</button></span>
                                 <span className='mx-5'><button className='bg-red-600 text-white rounded-md px-4 py-2' onClick={() => handleDelete(todo.todo_id)}>Delete</button></span>
                             </div>
                         </li>
                     ))}
                 </ol>
+
             </>}
         </div>
     )
